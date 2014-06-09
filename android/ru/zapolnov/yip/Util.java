@@ -1,7 +1,10 @@
 
 package ru.zapolnov.yip;
 
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.view.View;
+import java.util.HashMap;
 
 public final class Util
 {
@@ -22,6 +25,8 @@ public final class Util
 	public static final int UIAlignHorizontalMask = 0x03;
 	public static final int UIAlignVerticalMask = 0x30;
 
+	private static final HashMap<String, Typeface> m_Typefaces = new HashMap<String, Typeface>();
+
 	public static void layoutChild(View child, int alignment, float x, float y, float w, float h,
 		float xScale, float yScale, float wScale, float hScale, float horzScale, float vertScale)
 	{
@@ -41,5 +46,17 @@ public final class Util
 			widgetY += h * vertScale - widgetH;
 
 		child.layout((int)widgetX, (int)widgetY, (int)(widgetX + widgetW), (int)(widgetY + widgetH));
+	}
+
+	public static Typeface getTypeface(AssetManager assetManager, String name)
+	{
+		Typeface typeface = m_Typefaces.get(name);
+		if (typeface != null)
+			return typeface;
+
+		typeface = Typeface.createFromAsset(assetManager, name);
+		m_Typefaces.put(name, typeface);
+
+		return typeface;
 	}
 }

@@ -52,20 +52,26 @@ public final class Util
 	public static void layoutChild(View child, int alignment, float x, float y, float w, float h,
 		float xScale, float yScale, float wScale, float hScale, float horzScale, float vertScale)
 	{
-		float widgetX = x * xScale;
-		float widgetY = y * yScale;
 		float widgetW = w * wScale;
 		float widgetH = h * hScale;
 
-		if ((alignment & UIAlignHorizontalMask) == UIAlignHCenter)
-			widgetX += (w * horzScale - widgetW) * 0.5f;
-		else if ((alignment & UIAlignHorizontalMask) == UIAlignRight)
-			widgetX += w * horzScale - widgetW;
+		float widgetX = 0.0f;
+		switch (alignment & UIAlignHorizontalMask)
+		{
+		case UIAlignUnspecified: widgetX = x * xScale; break;
+		case UIAlignLeft: widgetX = x * horzScale; break;
+		case UIAlignHCenter: widgetX = x * horzScale + (w * horzScale - widgetW) * 0.5f; break;
+		case UIAlignRight: widgetX = x * horzScale + (w * horzScale - widgetW); break;
+		}
 
-		if ((alignment & UIAlignVerticalMask) == UIAlignVCenter)
-			widgetY += (h * vertScale - widgetH) * 0.5f;
-		else if ((alignment & UIAlignVerticalMask) == UIAlignBottom)
-			widgetY += h * vertScale - widgetH;
+		float widgetY = 0.0f;
+		switch (alignment & UIAlignVerticalMask)
+		{
+		case UIAlignUnspecified: widgetY = y * yScale; break;
+		case UIAlignTop: widgetY = y * vertScale; break;
+		case UIAlignVCenter: widgetY = y * vertScale + (h * vertScale - widgetH) * 0.5f; break;
+		case UIAlignBottom: widgetY = y * vertScale + (h * vertScale - widgetH); break;
+		}
 
 		child.layout((int)widgetX, (int)widgetY, (int)(widgetX + widgetW), (int)(widgetY + widgetH));
 	}
